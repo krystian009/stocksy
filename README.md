@@ -1,6 +1,6 @@
 # Stocksy
 
-[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/your-username/10x-stocksy)
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/your-username/stocksy)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Stocksy is a web-based application designed to simplify household inventory management. It provides users with the core tools to track their products, reduce unnecessary purchases, and avoid running out of essential items. This is a sample project for 10xDev training certification.
@@ -55,8 +55,8 @@ To run the project locally, follow these steps:
 
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/your-username/10x-stocksy.git
-    cd 10x-stocksy
+    git clone https://github.com/your-username/stocksy.git
+    cd stocksy
     ```
 
 2.  **Install dependencies:**
