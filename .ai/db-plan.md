@@ -4,18 +4,6 @@ This document outlines the PostgreSQL database schema for the Stocksy applicatio
 
 ## 1. Tables and Data Types
 
-### ENUM Types
-
-First, we define a custom `ENUM` type to categorize inventory changes.
-
-```sql
-CREATE TYPE inventory_log_change_type AS ENUM (
-  'MANUAL_UPDATE',
-  'CHECK_IN',
-  'INITIAL_STOCK'
-);
-```
-
 ### `products`
 
 This table stores the core inventory information for each user.
@@ -55,7 +43,6 @@ This table serves as an audit trail, recording every change to a product's quant
 - **`created_at`**: `TIMESTAMPTZ` - Timestamp of when the log entry was created, defaults to `now()`.
 - **`user_id`**: `UUID` - Foreign Key referencing `auth.users(id)`.
 - **`product_id`**: `UUID` - Foreign Key referencing `products(id)`. Deletes automatically if the parent product is deleted (`ON DELETE CASCADE`).
-- **`change_type`**: `inventory_log_change_type` - The type of change (e.g., `'MANUAL_UPDATE'`).
 - **`previous_quantity`**: `INTEGER` - The quantity before the change occurred.
 - **`new_quantity`**: `INTEGER` - The quantity after the change occurred.
 
