@@ -10,6 +10,13 @@ export class DuplicateProductError extends Error {
   }
 }
 
+export class ProductNotFoundError extends Error {
+  constructor(message = "Product not found") {
+    super(message);
+    this.name = "ProductNotFoundError";
+  }
+}
+
 interface CreateProductParams {
   supabase: SupabaseClient;
   userId: string;
@@ -62,4 +69,33 @@ export async function createProduct({ supabase, userId, payload }: CreateProduct
   }
 
   return data;
+}
+
+interface DeleteProductParams {
+  supabase: SupabaseClient;
+  userId: string;
+  productId: string;
+}
+
+export async function deleteProduct({ supabase, userId, productId }: DeleteProductParams): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID is required to delete products");
+  }
+
+  if (!productId) {
+    throw new Error("Product ID is required to delete products");
+  }
+
+  const { error, count } = await supabase
+    .from("products")
+    .delete({ count: "exact" })
+    .match({ id: productId, user_id: userId });
+
+  if (error) {
+    throw error;
+  }
+
+  if (!count) {
+    throw new ProductNotFoundError();
+  }
 }
