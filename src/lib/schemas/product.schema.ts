@@ -28,3 +28,12 @@ export const updateProductSchema = createProductSchema.partial().refine((data) =
 });
 
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
+
+export const getProductsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  sort: z.enum(["name", "quantity"]).default("name"),
+  order: z.enum(["asc", "desc"]).default("asc"),
+});
+
+export type GetProductsQuerySchema = z.infer<typeof getProductsQuerySchema>;

@@ -1,7 +1,12 @@
 import type { Tables, TablesInsert } from "@/db/database.types";
 import type { SupabaseClient } from "@/db/supabase.client";
 
-import type { CreateProductCommand, UpdateProductCommand } from "@/types";
+import type {
+  CreateProductCommand,
+  UpdateProductCommand,
+  ProductsListQueryParams,
+  ProductsListResponseDTO,
+} from "@/types";
 
 export class DuplicateProductError extends Error {
   constructor(message = "Product with the provided name already exists") {
@@ -169,4 +174,51 @@ export async function updateProduct({
   }
 
   return data;
+}
+
+interface GetProductsParams {
+  supabase: SupabaseClient;
+  userId: string;
+  query: ProductsListQueryParams;
+}
+
+export async function getProducts({ supabase, userId, query }: GetProductsParams): Promise<ProductsListResponseDTO> {
+  const page = query.page ?? 1;
+  const limit = query.limit ?? 20;
+  const sort = query.sort ?? "name";
+  const order = query.order ?? "asc";
+
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  const [countResult, dataResult] = await Promise.all([
+    supabase.from("products").select("id", { count: "exact", head: true }).eq("user_id", userId),
+    supabase
+      .from("products")
+      .select("id, name, quantity, minimum_threshold")
+      .eq("user_id", userId)
+      .order(sort, { ascending: order === "asc" })
+      .range(from, to),
+  ]);
+
+  if (countResult.error) {
+    throw countResult.error;
+  }
+
+  if (dataResult.error) {
+    throw dataResult.error;
+  }
+
+  const totalItems = countResult.count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalItems / limit));
+
+  return {
+    data: dataResult.data ?? [],
+    meta: {
+      total_items: totalItems,
+      total_pages: totalPages,
+      current_page: page,
+      per_page: limit,
+    },
+  };
 }
