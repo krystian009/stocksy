@@ -217,9 +217,9 @@ Base path: `/api/v1/shopping-list`
 Input validation will be performed at the API level using Zod schemas to provide immediate, clear error messages to the client before hitting the database.
 
 -   **Product Creation/Update (`POST /products`, `PATCH /products/{id}`):**
-    -   `name`: Must be a string with a minimum length of 3 characters.
+    -   `name`: Must be a string with a minimum length of 3 characters, maximum length of  120 characters.
     -   `quantity`: Must be a non-negative integer (`>= 0`).
-    -   `minimum_threshold`: Must be a non-negative integer (`>= 0`).
+    -   `minimum_threshold`: Must be a positive integer (`>0`).
 -   **Shopping List Update (`PATCH /shopping-list/{id}`):**
     -   `quantity_to_purchase`: Must be a positive integer (`> 0`).
 
