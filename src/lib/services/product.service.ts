@@ -1,7 +1,7 @@
 import type { Tables, TablesInsert } from "@/db/database.types";
 import type { SupabaseClient } from "@/db/supabase.client";
 
-import type { CreateProductCommand } from "@/types";
+import type { CreateProductCommand, UpdateProductCommand } from "@/types";
 
 export class DuplicateProductError extends Error {
   constructor(message = "Product with the provided name already exists") {
@@ -98,4 +98,75 @@ export async function deleteProduct({ supabase, userId, productId }: DeleteProdu
   if (!count) {
     throw new ProductNotFoundError();
   }
+}
+
+interface UpdateProductParams {
+  supabase: SupabaseClient;
+  userId: string;
+  productId: string;
+  payload: UpdateProductCommand;
+}
+
+export async function updateProduct({
+  supabase,
+  userId,
+  productId,
+  payload,
+}: UpdateProductParams): Promise<ProductRow> {
+  if (!userId) {
+    throw new Error("User ID is required to update products");
+  }
+
+  if (!productId) {
+    throw new Error("Product ID is required to update products");
+  }
+
+  if (payload.name) {
+    const trimmedName = payload.name.trim();
+    if (!trimmedName) {
+      throw new Error("Product name cannot be empty");
+    }
+
+    const { data: conflictProduct, error: conflictError } = await supabase
+      .from("products")
+      .select("id")
+      .eq("user_id", userId)
+      .ilike("name", trimmedName)
+      .neq("id", productId)
+      .maybeSingle();
+
+    if (conflictError) {
+      throw conflictError;
+    }
+
+    if (conflictProduct) {
+      throw new DuplicateProductError();
+    }
+
+    payload = {
+      ...payload,
+      name: trimmedName,
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("products")
+    .update(payload)
+    .match({ id: productId, user_id: userId })
+    .select()
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") {
+      throw new ProductNotFoundError();
+    }
+
+    throw error;
+  }
+
+  if (!data) {
+    throw new ProductNotFoundError();
+  }
+
+  return data;
 }

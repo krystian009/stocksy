@@ -22,3 +22,9 @@ export const createProductSchema = z.object({
 });
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
+
+export const updateProductSchema = createProductSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: "At least one field must be provided to update",
+});
+
+export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
