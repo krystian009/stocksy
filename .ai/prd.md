@@ -11,7 +11,7 @@ Managing household product inventory can often be tedious and time-consuming. A 
 - Each user's inventory is private and associated with their account.
 
 ### 3.2. Product Management
-- Users can add products with a name (minimum 3 characters), a current quantity (non-negative integer), and a minimum threshold (non-negative integer).
+- Users can add products with a name (minimum 3 characters, maximum 120 characters), a current quantity (non-negative integer), and a minimum threshold (non-negative integer).
 - Users can edit all product details (name, quantity, and minimum threshold).
 - When editing quantity, users can either input the number directly or use increment/decrement buttons for quick adjustments.
 - Users can permanently delete products from their inventory. A confirmation prompt will be displayed before deletion to prevent accidental removal.
@@ -162,6 +162,7 @@ Managing household product inventory can often be tedious and time-consuming. A 
 - Acceptance Criteria:
   - Given I am in the "Add Product" or "Edit Product" form,
   - When I try to save with a product name less than 3 characters long, I see an error message.
+  - When I try to save with a product name more than 130 characters long, I see an error message.
   - When I try to save with a negative number for Quantity or Minimum Threshold, I see an error message.
   - The form cannot be submitted until all validation errors are resolved.
 
