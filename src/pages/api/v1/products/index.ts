@@ -53,7 +53,7 @@ export async function GET({ url, locals }: APIContext) {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
+  } catch {
     return createErrorResponse(500, { message: "Failed to fetch products" });
   }
 }

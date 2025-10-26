@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import InventoryView from "@/components/inventory/InventoryView";
+---
+
+<Layout title="Inventory">
+  <main class="container mx-auto px-4 py-8">
+    <InventoryView client:load />
+  </main>
+</Layout>
