@@ -35,11 +35,11 @@ const ProductTable: FC<ProductTableProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-lg border">
+      <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center font-bold">Name</TableHead>
+              <TableHead className="font-bold min-w-[120px] sm:text-center">Name</TableHead>
               <TableHead className="w-[160px] text-center font-bold">Quantity</TableHead>
               <TableHead className="w-[140px] text-center font-bold">Minimum threshold</TableHead>
               <TableHead className="w-[120px] text-center font-bold">Actions</TableHead>

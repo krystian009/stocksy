@@ -35,18 +35,23 @@ const sortOptions: {
 ];
 
 const InventoryHeader: FC<InventoryHeaderProps> = ({ sort, order, onSortChange, onAddProduct, onRefresh }) => {
-  const handleSortFieldChange = (nextSort: ProductsListQueryParams["sort"]) => {
+  const handleSortFieldChange = (value: string) => {
+    const nextSort = value as ProductsListQueryParams["sort"];
+    if (!nextSort) return;
+
     const isSameField = nextSort === sort;
     const nextOrder = isSameField ? (order === "asc" ? "desc" : "asc") : "asc";
     onSortChange(nextSort, nextOrder);
   };
 
-  const handleOrderChange = (nextOrder: ProductsListQueryParams["order"]) => {
+  const handleOrderChange = (value: string) => {
+    const nextOrder = value as ProductsListQueryParams["order"];
+    if (!nextOrder || !sort) return;
     onSortChange(sort, nextOrder);
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-semibold tracking-tight">Inventory</h1>
@@ -58,37 +63,39 @@ const InventoryHeader: FC<InventoryHeaderProps> = ({ sort, order, onSortChange, 
           Manage quantities, thresholds, and availability for your products.
         </p>
       </div>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-muted-foreground">Sort by</span>
-          <Select value={sort} onValueChange={handleSortFieldChange}>
-            <SelectTrigger className="w-[160px]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-nowrap sm:justify-between">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">Sort by</span>
+          <Select value={sort ?? ""} onValueChange={handleSortFieldChange}>
+            <SelectTrigger className="w-full min-w-[140px] sm:w-[160px]">
               <SelectValue placeholder="Select field" />
             </SelectTrigger>
             <SelectContent>
               {sortOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={option.value ?? ""}>
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <Select value={order} onValueChange={handleOrderChange}>
-            <SelectTrigger className="w-[140px]">
+          <Select value={order ?? ""} onValueChange={handleOrderChange}>
+            <SelectTrigger className="w-full min-w-[120px] sm:w-[140px]">
               <SelectValue placeholder="Select order" />
             </SelectTrigger>
             <SelectContent>
               {sortOptions
                 .find((option) => option.value === sort)
                 ?.orders.map((orderOption) => (
-                  <SelectItem key={orderOption.value} value={orderOption.value}>
+                  <SelectItem key={orderOption.value} value={orderOption.value ?? ""}>
                     {orderOption.label}
                   </SelectItem>
                 ))}
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={onAddProduct}>Add Product</Button>
+        <Button onClick={onAddProduct} className="whitespace-nowrap self-end sm:ml-4 sm:self-auto">
+          Add Product
+        </Button>
       </div>
     </div>
   );

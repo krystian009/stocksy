@@ -20,7 +20,7 @@ const ProductTableRow: FC<ProductTableRowProps> = ({ product, onUpdateProduct, o
 
   return (
     <TableRow className={cn(hasError && "border-destructive/60 bg-destructive/10", isDeleting && "opacity-50")}>
-      <TableCell className="font-medium">
+      <TableCell className="font-medium min-w-[120px]">
         <div className="flex flex-col">
           <span>{product.name}</span>
           {hasError && <span className="text-xs text-destructive">Last update failed</span>}

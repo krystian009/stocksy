@@ -43,7 +43,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ComponentPropsWit
   return (
     <th
       ref={ref}
-      className={cn("h-10 px-3 text-left align-middle font-medium text-muted-foreground", className)}
+      className={cn("h-10 px-2 sm:px-3 text-left align-middle font-medium text-muted-foreground", className)}
       {...rest}
     />
   );
@@ -52,7 +52,7 @@ TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<HTMLTableCellElement, React.ComponentPropsWithoutRef<"td">>((props, ref) => {
   const { className, ...rest } = props;
-  return <td ref={ref} className={cn("p-3 align-middle", className)} {...rest} />;
+  return <td ref={ref} className={cn("p-2 sm:p-3 align-middle", className)} {...rest} />;
 });
 TableCell.displayName = "TableCell";
 
