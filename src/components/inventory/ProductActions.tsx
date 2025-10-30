@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { ProductViewModel } from "./types";
@@ -11,12 +12,22 @@ interface ProductActionsProps {
 
 const ProductActions: FC<ProductActionsProps> = ({ product, onEdit, onDelete }) => {
   return (
-    <div className="flex gap-2">
-      <Button variant="outline" size="sm" onClick={() => onEdit(product)}>
-        Edit
+    <div className="flex justify-end gap-2">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => onEdit(product)}
+        aria-label={`Edit ${product.name}`}
+      >
+        <Pencil className="h-4 w-4" />
       </Button>
-      <Button variant="destructive" size="sm" onClick={() => onDelete(product)}>
-        Delete
+      <Button
+        variant="destructive"
+        size="icon"
+        onClick={() => onDelete(product)}
+        aria-label={`Delete ${product.name}`}
+      >
+        <Trash2 className="h-4 w-4" />
       </Button>
     </div>
   );

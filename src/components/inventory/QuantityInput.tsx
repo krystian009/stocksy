@@ -59,7 +59,14 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-center gap-2">
+      <Input
+        inputMode="numeric"
+        value={value}
+        onChange={handleInputChange}
+        className="w-[60px] text-center"
+        aria-label={`Quantity for ${product.name}`}
+      />
       <Button
         type="button"
         variant="outline"
@@ -68,22 +75,6 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
         aria-label="Decrease quantity"
       >
         -
-      </Button>
-      <Input
-        inputMode="numeric"
-        value={value}
-        onChange={handleInputChange}
-        className="w-20 text-center"
-        aria-label={`Quantity for ${product.name}`}
-      />
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        onClick={() => adjustQuantity(1)}
-        aria-label="Increase quantity"
-      >
-        +
       </Button>
     </div>
   );

@@ -39,10 +39,10 @@ const ProductTable: FC<ProductTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead className="w-[220px]">Quantity</TableHead>
-              <TableHead>Minimum threshold</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-center font-bold">Name</TableHead>
+              <TableHead className="w-[160px] text-center font-bold">Quantity</TableHead>
+              <TableHead className="w-[140px] text-center font-bold">Minimum threshold</TableHead>
+              <TableHead className="w-[120px] text-center font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

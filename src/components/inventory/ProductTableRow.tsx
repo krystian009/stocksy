@@ -26,13 +26,13 @@ const ProductTableRow: FC<ProductTableRowProps> = ({ product, onUpdateProduct, o
           {hasError && <span className="text-xs text-destructive">Last update failed</span>}
         </div>
       </TableCell>
-      <TableCell className="w-[220px]">
+      <TableCell className="w-[160px]">
         <QuantityInput product={product} onUpdate={onUpdateProduct} />
       </TableCell>
-      <TableCell>
+      <TableCell className="w-[140px] text-center">
         <span>{product.minimum_threshold}</span>
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="w-[120px] text-right">
         <ProductActions product={product} onEdit={onEditProduct} onDelete={onDeleteProduct} />
       </TableCell>
     </TableRow>

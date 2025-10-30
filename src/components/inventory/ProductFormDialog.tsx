@@ -69,23 +69,25 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-4" onSubmit={form.handleSubmit(submitForm)}>
-          <div className="space-y-2">
+          <div>
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
+              className="mt-1"
               placeholder="e.g., Pasta sauce"
               {...form.register("name")}
               data-invalid={Boolean(form.formState.errors.name)}
             />
             {form.formState.errors.name && (
-              <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
+              <p className="text-sm text-destructive mt-2">{form.formState.errors.name.message}</p>
             )}
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="quantity">Quantity</Label>
               <Input
                 id="quantity"
+                className="mt-1"
                 type="number"
                 inputMode="numeric"
                 min={0}
@@ -94,13 +96,14 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
                 data-invalid={Boolean(form.formState.errors.quantity)}
               />
               {form.formState.errors.quantity && (
-                <p className="text-sm text-destructive">{form.formState.errors.quantity.message}</p>
+                <p className="text-sm text-destructive mt-2">{form.formState.errors.quantity.message}</p>
               )}
             </div>
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="minimum_threshold">Minimum threshold</Label>
               <Input
                 id="minimum_threshold"
+                className="mt-1"
                 type="number"
                 inputMode="numeric"
                 min={0}
@@ -109,7 +112,7 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
                 data-invalid={Boolean(form.formState.errors.minimum_threshold)}
               />
               {form.formState.errors.minimum_threshold && (
-                <p className="text-sm text-destructive">{form.formState.errors.minimum_threshold.message}</p>
+                <p className="text-sm text-destructive mt-2">{form.formState.errors.minimum_threshold.message}</p>
               )}
             </div>
           </div>
