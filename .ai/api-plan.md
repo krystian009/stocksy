@@ -200,6 +200,16 @@ Base path: `/api/v1/shopping-list`
 
 ---
 
+#### Check-In All Shopping List Items
+
+-   **Method**: `POST`
+-   **Path**: `/check-in`
+-   **Description**: Marks a whole shopping list as purchased (all items from the shopping list are marked as purchased). This action increases the corresponding product's quantity by the `quantity_to_purchase` and subsequently removes the item from the shopping list (via a database trigger).
+-   **Success Code**: `204 No Content`
+-   **Error Codes**: `401 Unauthorized`, `404 Not Found`
+
+---
+
 ## 3. Authentication and Authorization
 
 -   **Mechanism**: Authentication will be handled using JSON Web Tokens (JWT) provided by Supabase Authentication.
@@ -227,4 +237,4 @@ Input validation will be performed at the API level using Zod schemas to provide
 
 -   **Automatic Shopping List Management**: The creation and deletion of `shopping_list_items` are handled automatically by PostgreSQL triggers in the database. The API does not contain this logic. An item is added to the list when `products.quantity` falls at or below `products.minimum_threshold` and removed when it rises above it.
 -   **Inventory Logging**: All changes to `products.quantity` are automatically logged in the `inventory_logs` table by a database trigger. This process is transparent to the API.
--   **"Check-In" Workflow**: The `POST /api/shopping-list/{itemId}/check-in` endpoint encapsulates this logic. It triggers an update on the `products` table, which in turn causes database triggers to update the `shopping_list_items` and `inventory_logs` tables, ensuring data consistency.
+-   **"Check-In" Workflow**: The `POST /api/shopping-list/{itemId}/check-in` and `POST /api/shopping-list/check-in`endpoint encapsulates this logic. It triggers an update on the `products` table, which in turn causes database triggers to update the `shopping_list_items` and `inventory_logs` tables, ensuring data consistency.
