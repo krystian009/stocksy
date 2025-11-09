@@ -112,3 +112,58 @@ Missing ID (wrong URL):
 curl -X DELETE http://localhost:3000/api/v1/products/
 ```
 
+
+## Shopping List
+
+### GET /api/v1/shopping-list
+
+Fetch all items on the user's shopping list.
+
+```bash
+curl "http://localhost:3000/api/v1/shopping-list"
+```
+
+### PATCH /api/v1/shopping-list/{itemId}
+
+Update the `quantity_to_purchase` for a shopping list item.
+
+```bash
+curl -X PATCH http://localhost:3000/api/v1/shopping-list/00000000-0000-0000-0000-000000000000 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "quantity_to_purchase": 25
+  }'
+```
+
+Invalid payload (quantity must be a positive number):
+
+```bash
+curl -X PATCH http://localhost:3000/api/v1/shopping-list/00000000-0000-0000-0000-000000000000 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "quantity_to_purchase": 0
+  }'
+```
+
+### POST /api/v1/shopping-list/{itemId}/check-in
+
+Mark a single shopping list item as purchased, which updates the corresponding product's inventory.
+
+```bash
+curl -X POST http://localhost:3000/api/v1/shopping-list/00000000-0000-0000-0000-000000000000/check-in
+```
+
+Not found (item does not exist for the user):
+
+```bash
+curl -X POST http://localhost:3000/api/v1/shopping-list/11111111-1111-1111-1111-111111111111/check-in
+```
+
+### POST /api/v1/shopping-list/check-in
+
+Mark all shopping list items as purchased (bulk check-in).
+
+```bash
+curl -X POST http://localhost:3000/api/v1/shopping-list/check-in
+```
+
