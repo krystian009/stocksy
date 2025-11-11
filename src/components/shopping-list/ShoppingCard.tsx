@@ -1,6 +1,7 @@
 import type { FC } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { ShoppingListItemViewModel } from "./types";
 import ShoppingQuantityInput from "./ShoppingQuantityInput";
@@ -15,13 +16,13 @@ const ShoppingCard: FC<ShoppingCardProps> = ({ item, onUpdateQuantity, onCheckIn
   const isDisabled = item.isUpdating || item.isCheckingIn;
 
   return (
-    <div className={cn("rounded-lg border p-4 space-y-4", isDisabled && "opacity-50")}>
-      <div className="space-y-1">
-        <h3 className="font-semibold text-lg">{item.product_name}</h3>
+    <Card className={cn(isDisabled && "opacity-50")}>
+      <CardHeader>
+        <CardTitle className="text-lg">{item.product_name}</CardTitle>
         {item.isUpdating && <p className="text-xs text-muted-foreground">Updating...</p>}
         {item.isCheckingIn && <p className="text-xs text-muted-foreground">Checking in...</p>}
-      </div>
-      <div className="flex flex-col gap-3">
+      </CardHeader>
+      <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-muted-foreground">Quantity to Purchase</span>
           <ShoppingQuantityInput item={item} onUpdate={onUpdateQuantity} />
@@ -36,8 +37,8 @@ const ShoppingCard: FC<ShoppingCardProps> = ({ item, onUpdateQuantity, onCheckIn
         >
           Check-in
         </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
