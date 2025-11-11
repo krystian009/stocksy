@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ShoppingListView from "@/components/shopping-list/ShoppingListView";
+import type { ShoppingListItemDTO } from "@/types";
+import { getShoppingListForUser } from "@/lib/services/shopping-list.service";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+
+// Fetch shopping list data server-side
+let initialItems: ShoppingListItemDTO[] = [];
+
+if (Astro.locals.supabase) {
+  try {
+    initialItems = await getShoppingListForUser({
+      supabase: Astro.locals.supabase,
+      userId: DEFAULT_USER_ID,
+    });
+  } catch (error) {
+    // On error, initialItems will remain empty array
+    // Error handling will be done client-side
+    console.error("Failed to fetch shopping list:", error);
+  }
+}
+---
+
+<Layout title="Shopping List">
+  <main class="container mx-auto px-4 py-8">
+    <ShoppingListView client:load initialItems={initialItems} />
+  </main>
+</Layout>
