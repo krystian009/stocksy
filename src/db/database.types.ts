@@ -116,7 +116,15 @@ export interface Database {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      check_in_shopping_list_item: {
+        Args: {
+          item_id: string;
+          requesting_user_id: string;
+        };
+        Returns: null;
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };

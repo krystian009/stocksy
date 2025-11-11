@@ -1,3 +1,4 @@
+import type { Database } from "@/db/database.types";
 import type { SupabaseClient } from "@/db/supabase.client";
 import type { ShoppingListItemDTO, UpdateShoppingListItemCommand } from "@/types";
 
@@ -21,6 +22,14 @@ interface ShoppingListItemWithProduct {
     name: string;
   };
 }
+
+interface CheckInShoppingListItemParams {
+  supabase: SupabaseClient;
+  userId: string;
+  itemId: string;
+}
+
+const CHECK_IN_SHOPPING_LIST_ITEM_RPC: keyof Database["public"]["Functions"] = "check_in_shopping_list_item";
 
 /**
  * Retrieves all shopping list items for a specific user.
@@ -155,4 +164,46 @@ export async function updateShoppingListItem({
     quantity_to_purchase: item.quantity_to_purchase,
     product_name: product.name as string,
   };
+}
+
+/**
+ * Checks in a shopping list item by incrementing the associated product's quantity
+ * and removing the item from the shopping list.
+ *
+ * This function delegates the transactional logic to the database via an RPC call,
+ * ensuring the product update and shopping list deletion succeed or fail atomically.
+ *
+ * @param params - Object containing the Supabase client, user ID, and item ID
+ * @param params.supabase - The Supabase client instance
+ * @param params.userId - The authenticated user's ID
+ * @param params.itemId - The UUID of the shopping list item to check in
+ * @throws Error if required parameters are missing, if the item is not found, or if the RPC fails
+ */
+export async function checkInShoppingListItem({
+  supabase,
+  userId,
+  itemId,
+}: CheckInShoppingListItemParams): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID is required to check in shopping list item");
+  }
+
+  if (!itemId) {
+    throw new Error("Item ID is required to check in shopping list item");
+  }
+
+  const { error } = await supabase.rpc(CHECK_IN_SHOPPING_LIST_ITEM_RPC, {
+    item_id: itemId,
+    requesting_user_id: userId,
+  });
+
+  if (!error) {
+    return;
+  }
+
+  if (error.code === "P0002" || (typeof error.message === "string" && error.message.includes("not found"))) {
+    throw new Error("Shopping list item not found");
+  }
+
+  throw error;
 }
