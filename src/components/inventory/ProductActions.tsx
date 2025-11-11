@@ -13,20 +13,10 @@ interface ProductActionsProps {
 const ProductActions: FC<ProductActionsProps> = ({ product, onEdit, onDelete }) => {
   return (
     <div className="flex justify-end gap-2">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => onEdit(product)}
-        aria-label={`Edit ${product.name}`}
-      >
+      <Button variant="outline" size="icon" onClick={() => onEdit(product)} aria-label={`Edit ${product.name}`}>
         <Pencil className="h-4 w-4" />
       </Button>
-      <Button
-        variant="destructive"
-        size="icon"
-        onClick={() => onDelete(product)}
-        aria-label={`Delete ${product.name}`}
-      >
+      <Button variant="destructive" size="icon" onClick={() => onDelete(product)} aria-label={`Delete ${product.name}`}>
         <Trash2 className="h-4 w-4" />
       </Button>
     </div>

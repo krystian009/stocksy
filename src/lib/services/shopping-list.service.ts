@@ -6,6 +6,15 @@ interface GetShoppingListParams {
   userId: string;
 }
 
+interface ShoppingListItemWithProduct {
+  id: string;
+  product_id: string;
+  quantity_to_purchase: number;
+  products: {
+    name: string;
+  };
+}
+
 /**
  * Retrieves all shopping list items for a specific user.
  *
@@ -41,7 +50,8 @@ export async function getShoppingListForUser({
 
   // Map the query result to ShoppingListItemDTO format
   // The products relation is nested as a single object (not array) due to foreign key relationship
-  const shoppingListItems: ShoppingListItemDTO[] = data.map((item: any) => {
+
+  const shoppingListItems: ShoppingListItemDTO[] = data.map((item: ShoppingListItemWithProduct) => {
     // Supabase returns the joined products table as a nested object
     const product = item.products;
     if (!product || typeof product !== "object" || !("name" in product)) {
