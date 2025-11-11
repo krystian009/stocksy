@@ -29,7 +29,13 @@ interface CheckInShoppingListItemParams {
   itemId: string;
 }
 
+interface CheckInAllShoppingListItemsParams {
+  supabase: SupabaseClient;
+  userId: string;
+}
+
 const CHECK_IN_SHOPPING_LIST_ITEM_RPC: keyof Database["public"]["Functions"] = "check_in_shopping_list_item";
+const CHECK_IN_ALL_SHOPPING_LIST_ITEMS_RPC: keyof Database["public"]["Functions"] = "check_in_all_shopping_list_items";
 
 /**
  * Retrieves all shopping list items for a specific user.
@@ -206,4 +212,38 @@ export async function checkInShoppingListItem({
   }
 
   throw error;
+}
+
+/**
+ * Checks in all shopping list items by incrementing the associated products' quantities
+ * and clearing the shopping list.
+ *
+ * This function delegates the transactional logic to the database via an RPC call,
+ * ensuring all product updates and shopping list deletions succeed or fail atomically.
+ *
+ * @param params - Object containing the Supabase client and user ID
+ * @param params.supabase - The Supabase client instance
+ * @param params.userId - The authenticated user's ID
+ * @throws Error if userId is missing, if the shopping list is empty, or if the RPC fails
+ */
+export async function checkInAllShoppingListItems({
+  supabase,
+  userId,
+}: CheckInAllShoppingListItemsParams): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID is required to check in all shopping list items");
+  }
+
+  const { data, error } = await supabase.rpc(CHECK_IN_ALL_SHOPPING_LIST_ITEMS_RPC, {
+    requesting_user_id: userId,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  // If zero items were processed, throw a "Not Found" error to signify an empty list
+  if (data === 0) {
+    throw new Error("Shopping list is empty");
+  }
 }
