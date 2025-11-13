@@ -8,6 +8,7 @@ export { HomeDashboard } from "./HomeDashboard";
 export { HomeDashboardSkeleton } from "./HomeDashboardSkeleton";
 export { LowStockList } from "./LowStockList";
 export { LowStockItemCard } from "./LowStockItemCard";
+export { SummaryCard } from "./SummaryCard";
 export { EmptyState } from "./EmptyState";
 export { ErrorState } from "./ErrorState";
 export type { LowStockItemViewModel } from "./types";

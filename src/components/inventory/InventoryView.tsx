@@ -1,4 +1,4 @@
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import type { ProductsListQueryParams } from "@/types";
 import { useInventory } from "@/lib/hooks/useInventory";
 import InventoryHeader from "./InventoryHeader";
@@ -20,6 +20,26 @@ const InventoryView: FC = () => {
   }>({ mode: null, product: null });
 
   const [deleteState, setDeleteState] = useState<ProductViewModel | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const intent = params.get("intent");
+
+    if (intent !== "add") {
+      return;
+    }
+
+    setDialogState({ mode: "create", product: null });
+    params.delete("intent");
+
+    const queryString = params.toString();
+    const newUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", newUrl);
+  }, []);
 
   const handleAddProductClick = () => {
     setDialogState({ mode: "create", product: null });

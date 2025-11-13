@@ -13,11 +13,11 @@ interface LowStockItemCardProps {
  */
 export function LowStockItemCard({ item }: LowStockItemCardProps) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="gap-2" aria-label={`Low stock item: ${item.product_name}`}>
+      <CardHeader className="pb-2">
         <CardTitle className="text-lg">{item.product_name}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <div className="flex items-center gap-2">
           <span className="text-sm text-neutral-600 dark:text-neutral-400">Quantity to purchase:</span>
           <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
