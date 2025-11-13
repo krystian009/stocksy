@@ -1,0 +1,80 @@
+---
+/**
+ * Navigation Component
+ *
+ * A responsive navigation bar that provides site-wide navigation.
+ * Uses shadcn/ui Button components for consistent styling.
+ * Desktop navigation is static (Astro), mobile menu uses React for interactivity.
+ * Automatically highlights the active page based on current path.
+ */
+import { Button } from "@/components/ui/button";
+import { MobileMenu } from "@/components/MobileMenu";
+
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "Inventory", href: "/inventory" },
+  { name: "Shopping List", href: "/shopping-list" },
+];
+
+const isActive = (href: string) => {
+  if (href === "/") {
+    return currentPath === "/";
+  }
+  return currentPath.startsWith(href);
+};
+
+// Prepare nav items with active state for React component
+const navItemsWithState = navItems.map((item) => ({
+  ...item,
+  isActive: isActive(item.href),
+}));
+---
+
+<nav
+  class="relative border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <div class="container mx-auto px-4">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo/Brand -->
+      <a
+        href="/"
+        class="text-xl font-bold text-neutral-900 transition-colors hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-400"
+        aria-label="Stocksy home"
+      >
+        Stocksy
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="flex items-center gap-2">
+        <ul class="hidden items-center gap-1 md:flex" role="list">
+          {
+            navItems.map((item) => (
+              <li>
+                <Button variant="ghost" size="sm" asChild>
+                  <a
+                    href={item.href}
+                    class={
+                      isActive(item.href)
+                        ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
+                        : ""
+                    }
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.name}
+                  </a>
+                </Button>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Mobile Menu (React Component) -->
+        <MobileMenu client:load items={navItemsWithState} />
+      </div>
+    </div>
+  </div>
+</nav>
