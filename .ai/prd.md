@@ -97,6 +97,20 @@ Managing household product inventory can often be tedious and time-consuming. A 
   - Then my session is terminated,
   - And I am redirected to the login page.
 
+---
+- ID: US-018
+- Title: Secure Access and Authentication
+- Description: As a user, I want to be able to register and sign in to the system in a way that keeps my data secure.
+- Acceptance Criteria:
+  - Registration and login occur on dedicated pages.
+  - Login requires entering an email address and password.
+  - Registration requires entering an email address, password, and confirming the password.
+  - The user CANNOT access and page without logging in.
+  - The user can log in via a button in the top right corner.
+  - The user can log out via a button in the top right corner of the main @Layout.astro.
+  - External login providers (e.g., Google, GitHub) are NOT used.
+  - Password recovery must be possible.
+
 ### 5.2. Inventory Management
 ---
 - ID: US-005
