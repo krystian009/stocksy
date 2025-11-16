@@ -2,7 +2,6 @@ import type { APIContext } from "astro";
 
 import type { ShoppingListResponseDTO } from "@/types";
 import { getShoppingListForUser } from "@/lib/services/shopping-list.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -32,15 +31,20 @@ function createErrorResponse(status: number, body: ErrorBody) {
  */
 export async function GET({ locals }: APIContext) {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
   }
 
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
+  }
+
   try {
     const shoppingListItems = await getShoppingListForUser({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
     });
 
     const response: ShoppingListResponseDTO = {

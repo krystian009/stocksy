@@ -3,16 +3,20 @@ import Layout from "../layouts/Layout.astro";
 import ShoppingListView from "@/components/shopping-list/ShoppingListView";
 import type { ShoppingListItemDTO } from "@/types";
 import { getShoppingListForUser } from "@/lib/services/shopping-list.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 // Fetch shopping list data server-side
 let initialItems: ShoppingListItemDTO[] = [];
+const { supabase, user } = Astro.locals;
 
-if (Astro.locals.supabase) {
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+if (supabase) {
   try {
     initialItems = await getShoppingListForUser({
-      supabase: Astro.locals.supabase,
-      userId: DEFAULT_USER_ID,
+      supabase,
+      userId: user.id,
     });
   } catch (error) {
     // On error, initialItems will remain empty array

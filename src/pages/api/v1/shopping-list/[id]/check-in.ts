@@ -1,7 +1,6 @@
 import type { APIContext, APIRoute } from "astro";
 import { z } from "zod";
 
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import { checkInShoppingListItem } from "@/lib/services/shopping-list.service";
 
 export const prerender = false;
@@ -36,9 +35,14 @@ const pathParamsSchema = z.object({
  */
 export const POST: APIRoute = async ({ params, locals }: APIContext) => {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
+  }
+
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
   }
 
   const parseResult = pathParamsSchema.safeParse(params);
@@ -54,7 +58,7 @@ export const POST: APIRoute = async ({ params, locals }: APIContext) => {
   try {
     await checkInShoppingListItem({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       itemId,
     });
 

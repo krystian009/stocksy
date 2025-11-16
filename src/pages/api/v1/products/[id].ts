@@ -6,7 +6,6 @@ import {
   updateProduct,
   DuplicateProductError,
 } from "@/lib/services/product.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import type { ProductDTO } from "@/types";
 import { updateProductSchema } from "@/lib/schemas/product.schema";
 
@@ -28,9 +27,14 @@ function createErrorResponse(status: number, body: ErrorBody) {
 
 export async function DELETE({ params, locals }: APIContext) {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
+  }
+
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
   }
 
   const productId = params?.id;
@@ -42,7 +46,7 @@ export async function DELETE({ params, locals }: APIContext) {
   try {
     await deleteProduct({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       productId,
     });
   } catch (error) {
@@ -58,9 +62,14 @@ export async function DELETE({ params, locals }: APIContext) {
 
 export async function PATCH({ params, request, locals }: APIContext) {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
+  }
+
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
   }
 
   const productId = params?.id;
@@ -92,7 +101,7 @@ export async function PATCH({ params, request, locals }: APIContext) {
   try {
     const product = await updateProduct({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       productId,
       payload: parseResult.data,
     });

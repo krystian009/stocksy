@@ -28,7 +28,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
     };
 
     document.addEventListener("astro:page-load", handleNavigation);
-    
+
     return () => {
       document.removeEventListener("astro:page-load", handleNavigation);
     };
@@ -37,7 +37,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
   return (
     <div className="md:hidden">
       <MobileMenuButton onToggle={setIsOpen} />
-      
+
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div
@@ -70,4 +70,3 @@ export function MobileMenu({ items }: MobileMenuProps) {
     </div>
   );
 }
-

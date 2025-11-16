@@ -3,7 +3,6 @@ import type { APIContext, APIRoute } from "astro";
 import type { UpdateShoppingListItemCommand } from "@/types";
 import { updateShoppingListItem } from "@/lib/services/shopping-list.service";
 import { updateShoppingListItemSchema } from "@/lib/schemas/shopping-list.schema";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -33,9 +32,14 @@ function createErrorResponse(status: number, body: ErrorBody) {
  */
 export const PATCH: APIRoute = async ({ params, request, locals }: APIContext) => {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   // Validate Supabase client availability
   if (!supabase) {
+    if (!userId) {
+      return createErrorResponse(401, { message: "Unauthorized" });
+    }
+
     return createErrorResponse(500, { message: "Supabase client not available" });
   }
 
@@ -72,7 +76,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }: APIContext) =
   try {
     const updatedItem = await updateShoppingListItem({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       itemId,
       command,
     });

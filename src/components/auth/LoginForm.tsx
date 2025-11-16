@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -9,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthCard from "./AuthCard";
 import { loginSchema, type LoginFormValues } from "@/lib/schemas/auth.schema";
-
-const mockSubmit = () => new Promise<void>((resolve) => setTimeout(resolve, 800));
 
 const LoginForm = () => {
   const {
@@ -23,14 +19,31 @@ const LoginForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = handleSubmit(async () => {
+  const onSubmit = handleSubmit(async (values) => {
     try {
-      await mockSubmit();
-      toast.success("Login UI ready", {
-        description: "Form submission will be wired to Supabase in the next step.",
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
       });
-    } catch {
-      toast.error("Unable to sign in right now.");
+
+      const body = (await response.json().catch(() => null)) as { error?: string } | null;
+
+      if (!response.ok) {
+        throw new Error(body?.error ?? "Invalid email or password.");
+      }
+
+      toast.success("Signed in successfully", {
+        description: "Redirecting to your dashboard…",
+      });
+
+      window.location.assign("/");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to sign in right now.";
+      toast.error(message);
     }
   });
 

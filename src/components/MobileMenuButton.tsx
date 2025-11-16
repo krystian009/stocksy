@@ -40,4 +40,3 @@ export function MobileMenuButton({ onToggle }: MobileMenuButtonProps) {
     </Button>
   );
 }
-

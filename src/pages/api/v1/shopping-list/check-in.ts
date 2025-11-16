@@ -1,6 +1,5 @@
 import type { APIContext, APIRoute } from "astro";
 
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import { checkInAllShoppingListItems } from "@/lib/services/shopping-list.service";
 
 export const prerender = false;
@@ -31,15 +30,20 @@ function createErrorResponse(status: number, body: ErrorBody) {
  */
 export const POST: APIRoute = async ({ locals }: APIContext) => {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
   }
 
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
+  }
+
   try {
     await checkInAllShoppingListItems({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
     });
 
     return new Response(null, { status: 204 });

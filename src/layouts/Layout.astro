@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { title = "10x Astro Starter" } = Astro.props;
+const { user } = Astro.locals;
 ---
 
 <!doctype html>
@@ -22,7 +23,7 @@ const { title = "10x Astro Starter" } = Astro.props;
     <ClientRouter />
   </head>
   <body>
-    <Navigation />
+    <Navigation user={user} />
     <slot />
     <Toaster position="top-right" richColors theme="system" />
   </body>

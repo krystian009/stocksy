@@ -9,8 +9,19 @@
  */
 import { Button } from "@/components/ui/button";
 import { MobileMenu } from "@/components/MobileMenu";
+import AuthButton from "@/components/auth/AuthButton";
+
+interface Props {
+  user?: {
+    id: string;
+    email: string | null;
+  };
+}
 
 const currentPath = Astro.url.pathname;
+const { user }: Props = Astro.props;
+const isAuthenticated = Boolean(user);
+const shouldShowAuthButton = isAuthenticated || currentPath !== "/login";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -26,10 +37,12 @@ const isActive = (href: string) => {
 };
 
 // Prepare nav items with active state for React component
-const navItemsWithState = navItems.map((item) => ({
-  ...item,
-  isActive: isActive(item.href),
-}));
+const navItemsWithState = isAuthenticated
+  ? navItems.map((item) => ({
+      ...item,
+      isActive: isActive(item.href),
+    }))
+  : [];
 ---
 
 <nav
@@ -49,31 +62,42 @@ const navItemsWithState = navItems.map((item) => ({
       </a>
 
       <!-- Desktop Navigation -->
-      <div class="flex items-center gap-2">
-        <ul class="hidden items-center gap-1 md:flex" role="list">
-          {
-            navItems.map((item) => (
-              <li>
-                <Button variant="ghost" size="sm" asChild>
-                  <a
-                    href={item.href}
-                    class={
-                      isActive(item.href)
-                        ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
-                        : ""
-                    }
-                    aria-current={isActive(item.href) ? "page" : undefined}
-                  >
-                    {item.name}
-                  </a>
-                </Button>
-              </li>
-            ))
-          }
-        </ul>
+      <div class="flex items-center gap-3">
+        {
+          isAuthenticated && (
+            <ul class="hidden items-center gap-1 md:flex" role="list">
+              {navItems.map((item) => (
+                <li>
+                  <Button variant="ghost" size="sm" asChild>
+                    <a
+                      href={item.href}
+                      class={
+                        isActive(item.href)
+                          ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
+                          : ""
+                      }
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                    >
+                      {item.name}
+                    </a>
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )
+        }
 
-        <!-- Mobile Menu (React Component) -->
-        <MobileMenu client:load items={navItemsWithState} />
+        {
+          isAuthenticated && user?.email && (
+            <p class="hidden text-sm font-medium text-neutral-600 dark:text-neutral-200 md:block" aria-live="polite">
+              {user.email}
+            </p>
+          )
+        }
+
+        {isAuthenticated && <MobileMenu client:load items={navItemsWithState} />}
+
+        {shouldShowAuthButton && <AuthButton client:load isAuthenticated={isAuthenticated} />}
       </div>
     </div>
   </div>

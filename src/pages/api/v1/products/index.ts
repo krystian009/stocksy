@@ -4,7 +4,6 @@ import type { ProductDTO, ProductsListResponseDTO } from "@/types";
 import { createProduct, getProducts } from "@/lib/services/product.service";
 import { DuplicateProductError } from "@/lib/services/product.service";
 import { createProductSchema, getProductsQuerySchema } from "@/lib/schemas/product.schema";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -24,9 +23,14 @@ function createErrorResponse(status: number, body: ErrorBody) {
 
 export async function GET({ url, locals }: APIContext) {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
+  }
+
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
   }
 
   const params = Object.fromEntries(url.searchParams.entries());
@@ -43,7 +47,7 @@ export async function GET({ url, locals }: APIContext) {
   try {
     const response: ProductsListResponseDTO = await getProducts({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       query: parseResult.data,
     });
 
@@ -60,9 +64,14 @@ export async function GET({ url, locals }: APIContext) {
 
 export async function POST({ request, locals }: APIContext) {
   const supabase = locals.supabase;
+  const userId = locals.user?.id;
 
   if (!supabase) {
     return createErrorResponse(500, { message: "Supabase client not available" });
+  }
+
+  if (!userId) {
+    return createErrorResponse(401, { message: "Unauthorized" });
   }
 
   let payload: unknown;
@@ -88,7 +97,7 @@ export async function POST({ request, locals }: APIContext) {
   try {
     const product = await createProduct({
       supabase,
-      userId: DEFAULT_USER_ID,
+      userId,
       payload: parseResult.data,
     });
 
