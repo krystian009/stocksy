@@ -46,7 +46,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
           role="menu"
         >
           <div className="container mx-auto px-4">
-            <ul className="space-y-1" role="list">
+            <ul className="space-y-1">
               {items.map((item) => (
                 <li key={item.href} role="none">
                   <a
