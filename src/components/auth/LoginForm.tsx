@@ -12,6 +12,8 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -20,6 +22,8 @@ const LoginForm = () => {
   });
 
   const onSubmit = handleSubmit(async (values) => {
+    clearErrors("root");
+
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -43,6 +47,7 @@ const LoginForm = () => {
       window.location.assign("/");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to sign in right now.";
+      setError("root", { type: "server", message });
       toast.error(message);
     }
   });
@@ -96,6 +101,11 @@ const LoginForm = () => {
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Signing in..." : "Sign in"}
         </Button>
+        {errors.root && (
+          <p role="alert" className="text-sm font-medium text-destructive">
+            {errors.root.message}
+          </p>
+        )}
       </form>
     </AuthCard>
   );
