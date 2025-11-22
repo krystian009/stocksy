@@ -10,12 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { passwordResetSchema, type PasswordResetFormValues } from "@/lib/schemas/auth.schema";
 
-const mockSubmit = () => new Promise<void>((resolve) => setTimeout(resolve, 800));
-
 const PasswordResetForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<PasswordResetFormValues>({
@@ -24,15 +24,33 @@ const PasswordResetForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = handleSubmit(async () => {
+  const onSubmit = handleSubmit(async (values) => {
+    clearErrors("root");
     try {
-      await mockSubmit();
+      const response = await fetch("/api/auth/update-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(values),
+      });
+
+      const body = (await response.json().catch(() => null)) as { error?: string } | null;
+
+      if (!response.ok) {
+        throw new Error(body?.error ?? "Unable to update your password right now.");
+      }
+
       toast.success("Password updated", {
         description: "You can now sign in with your new password.",
       });
       reset();
-    } catch {
-      toast.error("Unable to update your password right now.");
+      window.location.assign("/login");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to update your password right now.";
+      setError("root", { type: "server", message });
+      toast.error(message);
     }
   });
 
@@ -82,6 +100,11 @@ const PasswordResetForm = () => {
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Saving..." : "Save new password"}
         </Button>
+        {errors.root && (
+          <p role="alert" className="text-sm font-medium text-destructive">
+            {errors.root.message}
+          </p>
+        )}
       </form>
     </AuthCard>
   );
