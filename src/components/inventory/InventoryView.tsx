@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, type FC, useRef } from "react";
 import type { ProductsListQueryParams } from "@/types";
 import { useInventory } from "@/lib/hooks/useInventory";
 import InventoryHeader from "./InventoryHeader";
@@ -21,6 +21,10 @@ const InventoryView: FC = () => {
 
   const [deleteState, setDeleteState] = useState<ProductViewModel | null>(null);
 
+  // Focus management refs
+  const addProductButtonRef = useRef<HTMLButtonElement>(null);
+  const lastFocusedElement = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -42,23 +46,39 @@ const InventoryView: FC = () => {
   }, []);
 
   const handleAddProductClick = () => {
+    lastFocusedElement.current = document.activeElement as HTMLElement;
     setDialogState({ mode: "create", product: null });
   };
 
   const handleEditProduct = (product: ProductViewModel) => {
+    lastFocusedElement.current = document.activeElement as HTMLElement;
     setDialogState({ mode: "edit", product });
   };
 
   const handleDialogClose = () => {
     setDialogState({ mode: null, product: null });
+
+    // Restore focus after dialog closes (with a small timeout to allow dialog to unmount)
+    setTimeout(() => {
+      if (lastFocusedElement.current) {
+        lastFocusedElement.current.focus();
+      }
+    }, 0);
   };
 
   const handleDeleteRequest = (product: ProductViewModel) => {
+    lastFocusedElement.current = document.activeElement as HTMLElement;
     setDeleteState(product);
   };
 
   const handleDeleteCancel = () => {
     setDeleteState(null);
+    // Restore focus
+    setTimeout(() => {
+      if (lastFocusedElement.current) {
+        lastFocusedElement.current.focus();
+      }
+    }, 0);
   };
 
   const handleDeleteConfirm = async () => {
@@ -69,6 +89,13 @@ const InventoryView: FC = () => {
     try {
       await deleteProduct(deleteState);
       setDeleteState(null);
+      // Restore focus to something reasonable, maybe the table container or "Add Product" button
+      // since the delete button is gone.
+      setTimeout(() => {
+        if (addProductButtonRef.current) {
+          addProductButtonRef.current.focus();
+        }
+      }, 0);
     } catch {
       // errors are surfaced via useInventory toasts
     }
@@ -104,6 +131,7 @@ const InventoryView: FC = () => {
         onSortChange={handleSortChange}
         onAddProduct={handleAddProductClick}
         onRefresh={refetch}
+        addProductRef={addProductButtonRef}
       />
 
       {error && (

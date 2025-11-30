@@ -20,9 +20,7 @@ export function LowStockItemCard({ item }: LowStockItemCardProps) {
       <CardContent className="pt-0">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Quantity to purchase:</span>
-          <span className="text-lg font-semibold text-foreground">
-            {item.quantity_to_purchase}
-          </span>
+          <span className="text-lg font-semibold text-foreground">{item.quantity_to_purchase}</span>
         </div>
       </CardContent>
     </Card>

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 
 import type { LowStockItemViewModel } from "@/components/home/types";
 import { getShoppingList } from "@/lib/api/shopping-list";
+import { getProducts } from "@/lib/api/products";
 
 interface UseLowStockItemsState {
   items: LowStockItemViewModel[] | null;
+  totalInventoryCount: number | null;
   isLoading: boolean;
   error: Error | null;
 }
@@ -13,14 +15,14 @@ interface UseLowStockItemsState {
  * Custom hook for fetching and managing low-stock items.
  *
  * Fetches the shopping list on component mount and manages loading, data, and error states.
- * The shopping list endpoint returns items that are below their minimum threshold,
- * which are the low-stock items we want to display on the home dashboard.
+ * Also fetches total inventory count to determine if the "First Run" experience should be shown.
  *
- * @returns An object containing items, isLoading, and error states
+ * @returns An object containing items, totalInventoryCount, isLoading, and error states
  */
 export function useLowStockItems() {
   const [state, setState] = useState<UseLowStockItemsState>({
     items: null,
+    totalInventoryCount: null,
     isLoading: true,
     error: null,
   });
@@ -28,20 +30,25 @@ export function useLowStockItems() {
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchLowStockItems() {
+    async function fetchData() {
       try {
-        const response = await getShoppingList();
+        // Fetch both low stock items and a minimal product list to get total count
+        const [shoppingListResponse, productsResponse] = await Promise.all([
+          getShoppingList(),
+          getProducts({ limit: 1 }), // We only need the meta.total_items
+        ]);
 
         if (isMounted) {
           setState({
-            items: response.data,
+            items: shoppingListResponse.data,
+            totalInventoryCount: productsResponse.meta.total_items,
             isLoading: false,
             error: null,
           });
         }
       } catch (error) {
         if (isMounted) {
-          const err = error instanceof Error ? error : new Error("Failed to load low-stock items");
+          const err = error instanceof Error ? error : new Error("Failed to load dashboard data");
 
           // Check for 401 Unauthorized and redirect to login
           if (error instanceof Error && error.message.includes("401")) {
@@ -51,6 +58,7 @@ export function useLowStockItems() {
 
           setState({
             items: null,
+            totalInventoryCount: null,
             isLoading: false,
             error: err,
           });
@@ -58,7 +66,7 @@ export function useLowStockItems() {
       }
     }
 
-    fetchLowStockItems();
+    fetchData();
 
     // Cleanup function to prevent state updates on unmounted component
     return () => {

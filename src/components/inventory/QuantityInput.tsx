@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FC } from "react";
+import { Plus, Minus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,22 +60,33 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-1">
+      <Button
+        type="button"
+        variant="outline"
+        size="icon"
+        className="h-8 w-8"
+        onClick={() => adjustQuantity(-1)}
+        aria-label="Decrease quantity"
+      >
+        <Minus className="h-3 w-3" />
+      </Button>
       <Input
         inputMode="numeric"
         value={value}
         onChange={handleInputChange}
-        className="w-[60px] text-center"
+        className="mx-1 w-[60px] text-center h-8"
         aria-label={`Quantity for ${product.name}`}
       />
       <Button
         type="button"
         variant="outline"
         size="icon"
-        onClick={() => adjustQuantity(-1)}
-        aria-label="Decrease quantity"
+        className="h-8 w-8"
+        onClick={() => adjustQuantity(1)}
+        aria-label="Increase quantity"
       >
-        -
+        <Plus className="h-3 w-3" />
       </Button>
     </div>
   );

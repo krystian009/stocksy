@@ -10,6 +10,7 @@
 import { Button } from "@/components/ui/button";
 import { MobileMenu } from "@/components/MobileMenu";
 import AuthButton from "@/components/auth/AuthButton";
+import { PackageOpen } from "lucide-react";
 
 interface Props {
   user?: {
@@ -58,6 +59,7 @@ const navItemsWithState = isAuthenticated
         class="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary/90"
         aria-label="Stocksy home"
       >
+        <PackageOpen className="h-6 w-6" />
         Stocksy
       </a>
 

@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, RefObject } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ProductsListQueryParams } from "@/types";
@@ -9,6 +9,7 @@ interface InventoryHeaderProps {
   onSortChange: (sort: ProductsListQueryParams["sort"], order: ProductsListQueryParams["order"]) => void;
   onAddProduct: () => void;
   onRefresh: () => void;
+  addProductRef?: RefObject<HTMLButtonElement | null>;
 }
 
 const sortOptions: {
@@ -34,7 +35,14 @@ const sortOptions: {
   },
 ];
 
-const InventoryHeader: FC<InventoryHeaderProps> = ({ sort, order, onSortChange, onAddProduct, onRefresh }) => {
+const InventoryHeader: FC<InventoryHeaderProps> = ({
+  sort,
+  order,
+  onSortChange,
+  onAddProduct,
+  onRefresh,
+  addProductRef,
+}) => {
   const handleSortFieldChange = (value: string) => {
     const nextSort = value as ProductsListQueryParams["sort"];
     if (!nextSort) return;
@@ -93,7 +101,7 @@ const InventoryHeader: FC<InventoryHeaderProps> = ({ sort, order, onSortChange, 
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={onAddProduct} className="whitespace-nowrap self-end sm:ml-4 sm:self-auto">
+        <Button ref={addProductRef} onClick={onAddProduct} className="whitespace-nowrap self-end sm:ml-4 sm:self-auto">
           Add Product
         </Button>
       </div>

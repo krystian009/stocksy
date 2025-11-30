@@ -1,7 +1,6 @@
 import type { FC } from "react";
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import type { PaginationMetaDTO, UpdateProductCommand } from "@/types";
 import ProductTableRow from "./ProductTableRow";
 import type { ProductViewModel } from "./types";
@@ -39,8 +38,8 @@ const ProductTable: FC<ProductTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="font-bold min-w-[120px] sm:text-center">Name</TableHead>
-              <TableHead className="w-[160px] text-center font-bold">Quantity</TableHead>
+              <TableHead className="font-bold min-w-[120px]">Name</TableHead>
+              <TableHead className="w-[180px] text-center font-bold">Quantity</TableHead>
               <TableHead className="w-[140px] text-center font-bold">Minimum threshold</TableHead>
               <TableHead className="w-[120px] text-center font-bold">Actions</TableHead>
             </TableRow>
@@ -60,30 +59,24 @@ const ProductTable: FC<ProductTableProps> = ({
       </div>
 
       {totalPages > 1 && (
-        <nav className="flex flex-wrap items-center justify-between gap-4" aria-label="Pagination">
-          <p className="text-sm text-muted-foreground">
+        <nav className="flex items-center justify-center gap-2" role="navigation" aria-label="Pagination Navigation">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+            className="rounded-md px-3 py-1 text-sm font-medium hover:bg-neutral-100 disabled:opacity-50 dark:hover:bg-neutral-800"
+          >
+            Previous
+          </button>
+          <span className="text-sm">
             Page {currentPage} of {totalPages}
-          </p>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </Button>
-          </div>
+          </span>
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+            className="rounded-md px-3 py-1 text-sm font-medium hover:bg-neutral-100 disabled:opacity-50 dark:hover:bg-neutral-800"
+          >
+            Next
+          </button>
         </nav>
       )}
     </div>

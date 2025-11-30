@@ -5,6 +5,7 @@ import { EmptyState } from "./EmptyState";
 import { ErrorState } from "./ErrorState";
 import { HomeDashboardSkeleton } from "./HomeDashboardSkeleton";
 import { LowStockList } from "./LowStockList";
+import { FirstRunWizard } from "./FirstRunWizard";
 
 /**
  * HomeDashboard Component
@@ -16,7 +17,8 @@ import { LowStockList } from "./LowStockList";
  * State Management:
  * - Loading: Displays HomeDashboardSkeleton while data is being fetched
  * - Error: Displays ErrorState if the API call fails
- * - Empty: Displays EmptyState if no low-stock items exist
+ * - First Run: Displays FirstRunWizard if total inventory is empty
+ * - Empty Low Stock: Displays EmptyState if inventory exists but no items are low stock
  * - Success: Displays LowStockList with sorted and limited items (max 8)
  *
  * Business Logic:
@@ -25,7 +27,7 @@ import { LowStockList } from "./LowStockList";
  * - Total count is passed to LowStockList for summary display
  */
 export function HomeDashboard() {
-  const { items, isLoading, error } = useLowStockItems();
+  const { items, totalInventoryCount, isLoading, error } = useLowStockItems();
 
   // Sort items by quantity_to_purchase (descending) and limit to top 8
   // Use useMemo to avoid recomputation on every render
@@ -51,7 +53,12 @@ export function HomeDashboard() {
     return <ErrorState error={error} />;
   }
 
-  // Empty state: no low-stock items
+  // First Run state: Total inventory is empty
+  if (totalInventoryCount === 0) {
+    return <FirstRunWizard />;
+  }
+
+  // Empty Low Stock state: Inventory exists, but no low-stock items
   if (!items || items.length === 0) {
     return <EmptyState />;
   }
