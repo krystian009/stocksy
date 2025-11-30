@@ -24,7 +24,7 @@ export function EmptyState() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-lg bg-muted p-4 text-sm text-muted-foreground text-left">
-            <p className="font-medium text-foreground mb-1">What's next?</p>
+            <p className="font-medium text-foreground mb-1">What&apos;s next?</p>
             <ul className="list-disc list-inside space-y-1">
               <li>Review your current stock levels.</li>
               <li>Add any new staples you buy often.</li>
