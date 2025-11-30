@@ -42,7 +42,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
       {isOpen && (
         <div
           id="mobile-menu"
-          className="absolute left-0 right-0 top-16 border-b border-neutral-200 bg-white pb-4 dark:border-neutral-800 dark:bg-neutral-950"
+          className="absolute left-0 right-0 top-16 border-b border-border bg-background pb-4 shadow-lg animate-in slide-in-from-top-2"
           role="menu"
         >
           <div className="container mx-auto px-4">
@@ -53,8 +53,8 @@ export function MobileMenu({ items }: MobileMenuProps) {
                     href={item.href}
                     className={`block rounded-md px-4 py-2 text-base font-medium transition-colors ${
                       item.isActive
-                        ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
-                        : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
+                        ? "bg-secondary text-secondary-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                     role="menuitem"
                     aria-current={item.isActive ? "page" : undefined}

@@ -22,7 +22,7 @@ export function LowStockList({ items, totalCount }: LowStockListProps) {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Low Stock Items</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-foreground">Low Stock Items</h1>
 
       {/* Summary card showing total count */}
       <SummaryCard totalCount={totalCount} />
@@ -36,7 +36,7 @@ export function LowStockList({ items, totalCount }: LowStockListProps) {
 
       {/* Show remaining count if more than 8 items */}
       {remainingCount > 0 && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 text-center">
+        <p className="text-center text-sm text-muted-foreground">
           and {remainingCount} more {remainingCount === 1 ? "item" : "items"} need restocking
         </p>
       )}

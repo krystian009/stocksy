@@ -46,7 +46,7 @@ const navItemsWithState = isAuthenticated
 ---
 
 <nav
-  class="relative border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
+  class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
   role="navigation"
   aria-label="Main navigation"
 >
@@ -55,14 +55,14 @@ const navItemsWithState = isAuthenticated
       <!-- Logo/Brand -->
       <a
         href="/"
-        class="text-xl font-bold text-neutral-900 transition-colors hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-400"
+        class="flex items-center gap-2 text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary/90"
         aria-label="Stocksy home"
       >
         Stocksy
       </a>
 
       <!-- Desktop Navigation -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-4">
         {
           isAuthenticated && (
             <ul class="hidden items-center gap-1 md:flex" role="list">
@@ -73,8 +73,8 @@ const navItemsWithState = isAuthenticated
                       href={item.href}
                       class={
                         isActive(item.href)
-                          ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
-                          : ""
+                          ? "bg-secondary text-secondary-foreground shadow-sm"
+                          : "text-muted-foreground transition-colors hover:text-foreground"
                       }
                       aria-current={isActive(item.href) ? "page" : undefined}
                     >
@@ -87,17 +87,19 @@ const navItemsWithState = isAuthenticated
           )
         }
 
-        {
-          isAuthenticated && user?.email && (
-            <p class="hidden text-sm font-medium text-neutral-600 dark:text-neutral-200 md:block" aria-live="polite">
-              {user.email}
-            </p>
-          )
-        }
+        <div class="flex items-center gap-2">
+          {
+            isAuthenticated && user?.email && (
+              <p class="hidden text-sm font-medium text-muted-foreground md:block" aria-live="polite">
+                {user.email}
+              </p>
+            )
+          }
 
-        {isAuthenticated && <MobileMenu client:load items={navItemsWithState} />}
+          {isAuthenticated && <MobileMenu client:load items={navItemsWithState} />}
 
-        {shouldShowAuthButton && <AuthButton client:load isAuthenticated={isAuthenticated} />}
+          {shouldShowAuthButton && <AuthButton client:load isAuthenticated={isAuthenticated} />}
+        </div>
       </div>
     </div>
   </div>

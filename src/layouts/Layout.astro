@@ -6,9 +6,10 @@ import Navigation from "@/components/Navigation.astro";
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = "10x Astro Starter" } = Astro.props;
+const { title = "Stocksy - Inventory Management", description = "Manage your home inventory efficiently." } = Astro.props;
 const { user } = Astro.locals;
 ---
 
@@ -19,21 +20,15 @@ const { user } = Astro.locals;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body>
+  <body class="min-h-screen bg-muted/40 font-sans antialiased">
     <Navigation user={user} />
-    <slot />
+    <div class="relative flex min-h-[calc(100vh-4rem)] flex-col">
+      <slot />
+    </div>
     <Toaster position="top-right" richColors theme="system" />
   </body>
 </html>
-
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
