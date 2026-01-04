@@ -20,5 +20,13 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
-.idea/
+# test coverage
+coverage/
+
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
+
+# Vitest
+.vitest/

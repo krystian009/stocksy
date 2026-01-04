@@ -38,6 +38,13 @@ The project is built with a modern tech stack:
 ### Backend and Database
 *   **Supabase:** An open-source Backend-as-a-Service (BaaS) platform providing database, authentication, APIs, and real-time capabilities out of the box.
 
+### Testing
+*   **Vitest:** A fast unit testing framework with native TypeScript support for testing services, schemas, hooks, and components.
+*   **@testing-library/react:** React component testing library for user-centric component tests.
+*   **Playwright:** Cross-browser end-to-end testing framework for validating complete user flows.
+*   **MSW (Mock Service Worker):** API mocking library for frontend tests.
+*   **axe-core:** Accessibility testing tool for WCAG 2.1 AA compliance checking.
+
 ### CI/CD and Hosting
 *   **GitHub Actions:** For continuous integration and deployment automation.
 *   **DigitalOcean:** Cloud hosting provider for application deployment.
@@ -91,6 +98,9 @@ The following scripts are available in the project:
 - `npm run lint`: Lints the codebase for errors.
 - `npm run lint:fix`: Lints the codebase and automatically fixes issues.
 - `npm run format`: Formats the code using Prettier.
+- `npm run test`: Runs unit tests with Vitest.
+- `npm run test:coverage`: Runs tests with code coverage reporting.
+- `npm run test:e2e`: Runs end-to-end tests with Playwright.
 
 ## Project Scope
 
