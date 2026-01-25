@@ -15,7 +15,7 @@ const DEBOUNCE_MS = 500;
 
 const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
   const [value, setValue] = useState<string>(() => String(product.quantity));
-  const debounceRef = useRef<number>();
+  const debounceRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     setValue(String(product.quantity));
@@ -68,6 +68,7 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
         className="h-8 w-8"
         onClick={() => adjustQuantity(-1)}
         aria-label="Decrease quantity"
+        data-test-id="quantity-decrease-button"
       >
         <Minus className="h-3 w-3" />
       </Button>
@@ -77,6 +78,7 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
         onChange={handleInputChange}
         className="mx-1 w-[60px] text-center h-8"
         aria-label={`Quantity for ${product.name}`}
+        data-test-id="quantity-input"
       />
       <Button
         type="button"
@@ -85,6 +87,7 @@ const QuantityInput: FC<QuantityInputProps> = ({ product, onUpdate }) => {
         className="h-8 w-8"
         onClick={() => adjustQuantity(1)}
         aria-label="Increase quantity"
+        data-test-id="quantity-increase-button"
       >
         <Plus className="h-3 w-3" />
       </Button>

@@ -66,7 +66,7 @@ const LoginForm = () => {
         </p>
       }
     >
-      <form className="space-y-5" onSubmit={onSubmit} noValidate>
+      <form className="space-y-5" onSubmit={onSubmit} noValidate data-test-id="login-form">
         <div className="space-y-2">
           <Label htmlFor="login-email">Email address</Label>
           <Input
@@ -75,6 +75,7 @@ const LoginForm = () => {
             placeholder="you@company.com"
             autoComplete="email"
             aria-invalid={Boolean(errors.email)}
+            data-test-id="login-email-input"
             {...register("email")}
           />
           {errors.email && <p className="text-sm font-medium text-destructive">{errors.email.message}</p>}
@@ -93,12 +94,13 @@ const LoginForm = () => {
             placeholder="••••••••"
             autoComplete="current-password"
             aria-invalid={Boolean(errors.password)}
+            data-test-id="login-password-input"
             {...register("password")}
           />
           {errors.password && <p className="text-sm font-medium text-destructive">{errors.password.message}</p>}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button type="submit" className="w-full" disabled={isSubmitting} data-test-id="login-submit-button">
           {isSubmitting ? "Signing in..." : "Sign in"}
         </Button>
         {errors.root && (

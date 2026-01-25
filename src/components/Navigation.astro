@@ -26,9 +26,9 @@ const isAuthenticated = Boolean(user);
 const shouldShowAuthButton = isAuthenticated || currentPath !== "/login";
 
 const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Inventory", href: "/inventory" },
-  { name: "Shopping List", href: "/shopping-list" },
+  { name: "Home", href: "/", testId: "nav-link-home" },
+  { name: "Inventory", href: "/inventory", testId: "nav-link-inventory" },
+  { name: "Shopping List", href: "/shopping-list", testId: "nav-link-shopping-list" },
 ];
 
 const isActive = (href: string) => {
@@ -71,6 +71,7 @@ const navItemsWithState = isAuthenticated
                   isActive(item.href) ? "text-foreground font-semibold" : "text-foreground/60"
                 )}
                 aria-current={isActive(item.href) ? "page" : undefined}
+                data-test-id={item.testId}
               >
                 {item.name}
               </a>

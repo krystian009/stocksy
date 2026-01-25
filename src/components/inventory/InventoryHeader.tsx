@@ -101,7 +101,12 @@ const InventoryHeader: FC<InventoryHeaderProps> = ({
             </SelectContent>
           </Select>
         </div>
-        <Button ref={addProductRef} onClick={onAddProduct} className="whitespace-nowrap self-end sm:ml-4 sm:self-auto">
+        <Button
+          ref={addProductRef}
+          onClick={onAddProduct}
+          className="whitespace-nowrap self-end sm:ml-4 sm:self-auto"
+          data-test-id="add-product-button"
+        >
           Add Product
         </Button>
       </div>

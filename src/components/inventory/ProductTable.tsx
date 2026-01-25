@@ -35,7 +35,7 @@ const ProductTable: FC<ProductTableProps> = ({
   return (
     <div className="space-y-4">
       <div className="overflow-x-auto rounded-lg border">
-        <Table>
+        <Table data-test-id="inventory-table">
           <TableHeader>
             <TableRow>
               <TableHead className="font-bold min-w-[120px]">Name</TableHead>

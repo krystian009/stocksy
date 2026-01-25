@@ -68,7 +68,7 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
             {product ? "Update product details and quantities." : "Create a new product in your inventory."}
           </DialogDescription>
         </DialogHeader>
-        <form className="space-y-4" onSubmit={form.handleSubmit(submitForm)}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(submitForm)} data-test-id="product-form">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
@@ -77,6 +77,7 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
               placeholder="e.g., Pasta sauce"
               {...form.register("name")}
               data-invalid={Boolean(form.formState.errors.name)}
+              data-test-id="product-name-input"
             />
             {form.formState.errors.name && (
               <p className="text-sm text-destructive mt-2">{form.formState.errors.name.message}</p>
@@ -94,6 +95,7 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
                 step={1}
                 {...form.register("quantity", { valueAsNumber: true })}
                 data-invalid={Boolean(form.formState.errors.quantity)}
+                data-test-id="product-quantity-input"
               />
               {form.formState.errors.quantity && (
                 <p className="text-sm text-destructive mt-2">{form.formState.errors.quantity.message}</p>
@@ -110,6 +112,7 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
                 step={1}
                 {...form.register("minimum_threshold", { valueAsNumber: true })}
                 data-invalid={Boolean(form.formState.errors.minimum_threshold)}
+                data-test-id="product-threshold-input"
               />
               {form.formState.errors.minimum_threshold && (
                 <p className="text-sm text-destructive mt-2">{form.formState.errors.minimum_threshold.message}</p>
@@ -117,10 +120,10 @@ const ProductFormDialog: FC<ProductFormDialogProps> = ({ isOpen, product, onClos
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={onClose}>
+            <Button type="button" variant="ghost" onClick={onClose} data-test-id="product-form-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <Button type="submit" disabled={form.formState.isSubmitting} data-test-id="product-form-submit-button">
               {product ? "Save changes" : "Add product"}
             </Button>
           </DialogFooter>

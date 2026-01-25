@@ -34,10 +34,13 @@ const ProductTableRow: FC<ProductTableRowProps> = ({ product, onUpdateProduct, o
   const status = getStockStatus(product.quantity, product.minimum_threshold);
 
   return (
-    <TableRow className={cn(hasError && "border-destructive/60 bg-destructive/10", isDeleting && "opacity-50")}>
+    <TableRow
+      className={cn(hasError && "border-destructive/60 bg-destructive/10", isDeleting && "opacity-50")}
+      data-test-id="product-row"
+    >
       <TableCell className="font-medium min-w-[120px]">
         <div className="flex flex-col gap-1">
-          <span>{product.name}</span>
+          <span data-test-id="product-name">{product.name}</span>
           {status && (
             <div className="flex">
               <Badge variant={status.variant} className={status.className}>

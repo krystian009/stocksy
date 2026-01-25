@@ -49,7 +49,7 @@ export function UserNav({ user }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full" data-test-id="user-nav-trigger">
           <Avatar className="h-8 w-8">
             {/* Placeholder for future user image */}
             <AvatarImage src="" alt={user.email || "User"} />
@@ -65,7 +65,12 @@ export function UserNav({ user }: UserNavProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} disabled={isSigningOut} className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={handleLogout}
+          disabled={isSigningOut}
+          className="cursor-pointer"
+          data-test-id="logout-button"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>{isSigningOut ? "Signing out..." : "Log out"}</span>
         </DropdownMenuItem>

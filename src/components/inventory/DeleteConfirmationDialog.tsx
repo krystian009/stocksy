@@ -31,10 +31,10 @@ const DeleteConfirmationDialog: FC<DeleteConfirmationDialogProps> = ({ isOpen, p
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" onClick={onClose} data-test-id="delete-cancel-button">
             Cancel
           </Button>
-          <Button variant="destructive" onClick={onConfirm}>
+          <Button variant="destructive" onClick={onConfirm} data-test-id="delete-confirm-button">
             Delete
           </Button>
         </DialogFooter>

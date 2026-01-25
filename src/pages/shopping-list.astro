@@ -21,6 +21,7 @@ if (supabase) {
   } catch (error) {
     // On error, initialItems will remain empty array
     // Error handling will be done client-side
+    // eslint-disable-next-line no-console
     console.error("Failed to fetch shopping list:", error);
   }
 }
