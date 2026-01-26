@@ -42,7 +42,7 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Setup project
+    // Setup project - runs first
     { name: "setup", testMatch: /.*\.setup\.ts/ },
     {
       name: "chromium",
@@ -52,6 +52,12 @@ export default defineConfig({
         storageState: "playwright/.auth/user.json",
       },
       dependencies: ["setup"],
+    },
+    // Teardown project - runs after all tests complete
+    {
+      name: "teardown",
+      testMatch: /.*\.teardown\.ts/,
+      dependencies: ["chromium"],
     },
   ],
 

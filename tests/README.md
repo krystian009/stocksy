@@ -70,6 +70,31 @@ npm run test:e2e -- tests/e2e/auth.spec.ts
 npm run test:e2e -- --headed
 ```
 
+#### E2E Test Setup and Teardown
+
+The E2E tests use Playwright's setup and teardown projects:
+
+- **Setup** (`auth.setup.ts`): Authenticates a test user and saves the session state before running tests
+- **Teardown** (`auth.teardown.ts`): Cleans up the Supabase database after all tests complete
+
+The teardown automatically deletes all test data for the E2E test user from these tables:
+- `inventory_logs`
+- `shopping_list_items`
+- `products`
+
+**Required Environment Variables** (in `.env.test` file):
+
+```bash
+# Supabase Configuration
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_anon_key
+
+# E2E Test User
+E2E_USERNAME_ID=test_user_uuid
+E2E_USERNAME=test@example.com
+E2E_PASSWORD=test_password
+```
+
 ## Writing Tests
 
 ### Unit Tests
