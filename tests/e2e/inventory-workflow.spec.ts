@@ -78,14 +78,16 @@ test.describe("Inventory Management Workflow", () => {
     await navigation.waitForLogoutRedirect();
   });
 
-  test("cancel product deletion", async () => {
+  test("cancel product deletion", async ({ page }) => {
     const testProduct = {
       name: `Persistent Product ${Date.now()}`,
       quantity: 5,
       threshold: 2,
     };
 
+    // Navigate to inventory page
     await navigation.goToInventory();
+    await expect(page).toHaveURL("/inventory");
 
     // Add a product
     await inventoryPage.addProduct(testProduct.name, testProduct.quantity, testProduct.threshold);
@@ -99,14 +101,16 @@ test.describe("Inventory Management Workflow", () => {
     expect(await inventoryPage.hasProduct(testProduct.name)).toBe(true);
   });
 
-  test("increase product quantity", async () => {
+  test("increase product quantity", async ({ page }) => {
     const testProduct = {
       name: `Quantity Test Product ${Date.now()}`,
       quantity: 3,
       threshold: 1,
     };
 
+    // Navigate to inventory page
     await navigation.goToInventory();
+    await expect(page).toHaveURL("/inventory");
 
     // Add a product
     await inventoryPage.addProduct(testProduct.name, testProduct.quantity, testProduct.threshold);
@@ -121,7 +125,7 @@ test.describe("Inventory Management Workflow", () => {
     expect(updatedQuantity).toBe(String(testProduct.quantity + 1));
   });
 
-  test("edit product details", async () => {
+  test("edit product details", async ({ page }) => {
     const timestamp = Date.now();
     const initialProduct = {
       name: `Original Product ${timestamp}`,
@@ -134,7 +138,9 @@ test.describe("Inventory Management Workflow", () => {
       threshold: 5,
     };
 
+    // Navigate to inventory page
     await navigation.goToInventory();
+    await expect(page).toHaveURL("/inventory");
 
     // Add a product
     await inventoryPage.addProduct(initialProduct.name, initialProduct.quantity, initialProduct.threshold);
