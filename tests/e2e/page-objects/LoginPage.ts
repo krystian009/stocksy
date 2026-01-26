@@ -48,6 +48,7 @@ export class LoginPage {
    * Submit the login form
    */
   async submit() {
+    await this.submitButton.waitFor({ state: "visible" });
     await this.submitButton.click();
   }
 
@@ -55,22 +56,17 @@ export class LoginPage {
    * Perform complete login action
    */
   async login(email: string, password: string) {
+    // Wait for the form to be fully loaded and interactive
+    await this.loginForm.waitFor({ state: "visible" });
+
+    // Small delay to ensure React has hydrated
+    await this.page.waitForLoadState("networkidle");
+
     await this.fillEmail(email);
     await this.fillPassword(password);
     await this.submit();
-  }
 
-  /**
-   * Wait for navigation after successful login
-   */
-  async waitForNavigation() {
-    await this.page.waitForURL("/");
-  }
-
-  /**
-   * Check if the login form is visible
-   */
-  async isVisible() {
-    return await this.loginForm.isVisible();
+    // Wait for successful login and redirect to home page
+    await this.page.waitForURL("/", { timeout: 10000 });
   }
 }

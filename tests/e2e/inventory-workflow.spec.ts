@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage, NavigationComponent, InventoryPage } from "./page-objects";
+import { NavigationComponent, InventoryPage } from "./page-objects";
 
 /**
  * E2E Test: Complete Inventory Workflow
@@ -20,55 +20,27 @@ import { LoginPage, NavigationComponent, InventoryPage } from "./page-objects";
  * - E2E_PASSWORD: Test user password
  */
 
-// Get test credentials from environment variables
-const getTestCredentials = () => {
-  const username = process.env.E2E_USERNAME;
-  const password = process.env.E2E_PASSWORD;
-
-  if (!username || !password) {
-    throw new Error(
-      "E2E_USERNAME and E2E_PASSWORD environment variables are required. " +
-        "Please set them in your .env.test file or environment."
-    );
-  }
-
-  return { email: username, password };
-};
-
 test.describe("Inventory Management Workflow", () => {
-  let loginPage: LoginPage;
   let navigation: NavigationComponent;
   let inventoryPage: InventoryPage;
-  let testUser: { email: string; password: string };
-
-  test.beforeAll(() => {
-    // Get credentials once for all tests
-    testUser = getTestCredentials();
-  });
 
   test.beforeEach(async ({ page }) => {
     // Initialize Page Object Models
-    loginPage = new LoginPage(page);
     navigation = new NavigationComponent(page);
     inventoryPage = new InventoryPage(page);
+
+    // Navigate to home page to ensure authenticated session is loaded
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
   });
 
   test("complete inventory workflow - add, update, delete product", async ({ page }) => {
     // Test data
     const testProduct = {
-      name: "Test Product",
+      name: `Test Product ${Date.now()}`,
       quantity: 2,
       threshold: 1,
     };
-
-    // Step 1: Login
-    await loginPage.goto();
-    await loginPage.login(testUser.email, testUser.password);
-    await loginPage.waitForNavigation();
-
-    // Verify login successful
-    await expect(page).toHaveURL("/");
-    expect(await navigation.isAuthenticated()).toBe(true);
 
     // Step 2: Navigate to inventory page
     await navigation.goToInventory();
@@ -104,22 +76,15 @@ test.describe("Inventory Management Workflow", () => {
     // Step 9: Logout
     await navigation.logout();
     await navigation.waitForLogoutRedirect();
-
-    // Verify redirected to login page
-    await expect(page).toHaveURL("/login");
-    expect(await loginPage.isVisible()).toBe(true);
   });
 
   test("cancel product deletion", async () => {
     const testProduct = {
-      name: "Persistent Product",
+      name: `Persistent Product ${Date.now()}`,
       quantity: 5,
       threshold: 2,
     };
 
-    // Login and navigate to inventory
-    await loginPage.goto();
-    await loginPage.login(testUser.email, testUser.password);
     await navigation.goToInventory();
 
     // Add a product
@@ -136,14 +101,11 @@ test.describe("Inventory Management Workflow", () => {
 
   test("increase product quantity", async () => {
     const testProduct = {
-      name: "Quantity Test Product",
+      name: `Quantity Test Product ${Date.now()}`,
       quantity: 3,
       threshold: 1,
     };
 
-    // Login and navigate to inventory
-    await loginPage.goto();
-    await loginPage.login(testUser.email, testUser.password);
     await navigation.goToInventory();
 
     // Add a product
@@ -160,20 +122,18 @@ test.describe("Inventory Management Workflow", () => {
   });
 
   test("edit product details", async () => {
+    const timestamp = Date.now();
     const initialProduct = {
-      name: "Original Product",
+      name: `Original Product ${timestamp}`,
       quantity: 10,
       threshold: 3,
     };
     const updatedProduct = {
-      name: "Updated Product",
+      name: `Updated Product ${timestamp}`,
       quantity: 15,
       threshold: 5,
     };
 
-    // Login and navigate to inventory
-    await loginPage.goto();
-    await loginPage.login(testUser.email, testUser.password);
     await navigation.goToInventory();
 
     // Add a product

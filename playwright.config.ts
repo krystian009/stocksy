@@ -1,8 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
 import path from "path";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, ".env.test") });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -38,9 +42,16 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project
+    { name: "setup", testMatch: /.*\.setup\.ts/ },
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // Use prepared auth state.
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
     },
   ],
 
@@ -50,6 +61,5 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
-    stdout: "pipe",
   },
 });
