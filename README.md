@@ -71,7 +71,8 @@ To run the project locally, follow these steps:
 
 - **Node.js:** `v22.14.0` (as specified in the `.nvmrc` file). We recommend using a version manager like `nvm`.
 - **npm:** Should be installed with Node.js.
-- **Supabase Account:** Required for database and authentication services.
+- **Docker:** Required for running Supabase locally. Make sure Docker Desktop (or Docker Engine) is installed and running.
+- **Supabase CLI:** Installed automatically via `npm install` (included as a dev dependency).
 
 ### Installation
 
@@ -86,27 +87,72 @@ To run the project locally, follow these steps:
     npm install
     ```
 
-3.  **Set up environment variables:**
-    Create a `.env` file in the root of the project and add your Supabase credentials. You can copy the example file:
+3.  **Start Supabase locally:**
+    Start the local Supabase instance using Docker (excluding the vector extension as it fails to start on Mac OS with Colima):
+    ```sh
+    npx supabase start -x vector
+    ```
+    
+    This command will:
+    - Start all required Supabase services (PostgreSQL, API, Auth, Storage, etc.)
+    - Display connection details including API URL, database URL, and authentication keys
+    - Make Supabase Studio available at `http://127.0.0.1:54323`
+    
+    **Note:** The first time you run this command, it may take a few minutes to download Docker images.
+
+4.  **Apply database migrations:**
+    All migrations from the `supabase/migrations/` directory will be automatically applied when Supabase starts. To manually apply migrations or reset the database:
+    ```sh
+    # Apply pending migrations (non-destructive)
+    npx supabase migration up
+    
+    # OR reset database and reapply all migrations (destructive - deletes all data)
+    npx supabase db reset
+    ```
+    
+    To verify which migrations are applied:
+    ```sh
+    npx supabase migration list
+    ```
+
+5.  **Set up environment variables:**
+    Create a `.env` file in the root of the project. You can copy the example file:
     ```sh
     cp .env.example .env
     ```
-    Your `.env` file should contain:
+    
+    For local development, use the values displayed after running `npx supabase start`. Your `.env` file should contain:
     ```
-    SUPABASE_URL=your-supabase-url
-    SUPABASE_KEY=your-supabase-anon-key
+    SUPABASE_URL=http://127.0.0.1:54321
+    SUPABASE_KEY=<publishable-key-from-supabase-start-output>
     ```
+    
+    You can find these values by running:
+    ```sh
+    npx supabase status
+    ```
+    
+    **For production/remote Supabase:** Use your remote Supabase project URL and anon key from the Supabase dashboard.
 
-4.  **Set up the database:**
-    - Navigate to your Supabase project dashboard
-    - Run the SQL scripts from the `supabase/` directory to set up the database schema
-    - The scripts will create the necessary tables: `products`, `shopping_list_items`, and `inventory_logs`
-
-5.  **Run the development server:**
+6.  **Run the development server:**
     ```sh
     npm run dev
     ```
     The application will be available at `http://localhost:3000`.
+
+### Stopping Supabase Locally
+
+To stop the local Supabase instance:
+```sh
+npx supabase stop
+```
+
+This will stop all Supabase Docker containers but preserve your data. To completely remove containers and data:
+```sh
+npx supabase stop --no-backup
+```
+
+**Note:** When you restart with `npx supabase start`, your data and migrations will still be there unless you use `--no-backup`.
 
 ## Environment Variables
 
