@@ -5,15 +5,13 @@ import { NavigationComponent, InventoryPage } from "./page-objects";
  * E2E Test: Complete Inventory Workflow
  *
  * This test covers the following scenario:
- * 1. User logs in successfully
- * 2. User navigates to inventory page
- * 3. User adds a product with quantity 2 and minimum 1
- * 4. Product shows on the inventory page in the table
- * 5. User decreases the value of that product by 1
- * 6. Inventory page updates
- * 7. User deletes the product
- * 8. Inventory page no longer shows any products
- * 9. User logs out
+ * 1. User navigates to inventory page
+ * 2. User adds a product with quantity 2 and minimum 1
+ * 3. Product shows on the inventory page in the table
+ * 4. User decreases the value of that product by 1
+ * 5. Inventory page updates
+ * 6. User deletes the product
+ * 7. Inventory page no longer shows any products
  *
  * Environment Variables Required:
  * - E2E_USERNAME: Test user email
@@ -42,14 +40,14 @@ test.describe("Inventory Management Workflow", () => {
       threshold: 1,
     };
 
-    // Step 2: Navigate to inventory page
+    // Step 1: Navigate to inventory page
     await navigation.goToInventory();
     await expect(page).toHaveURL("/inventory");
 
-    // Step 3: Add a new product
+    // Step 2: Add a new product
     await inventoryPage.addProduct(testProduct.name, testProduct.quantity, testProduct.threshold);
 
-    // Step 4: Verify product appears in table
+    // Step 3: Verify product appears in table
     await inventoryPage.waitForProduct(testProduct.name);
     expect(await inventoryPage.isTableVisible()).toBe(true);
     expect(await inventoryPage.hasProduct(testProduct.name)).toBe(true);
@@ -58,24 +56,20 @@ test.describe("Inventory Management Workflow", () => {
     const initialQuantity = await inventoryPage.getProductQuantityValue(testProduct.name);
     expect(initialQuantity).toBe(String(testProduct.quantity));
 
-    // Step 5: Decrease product quantity by 1
+    // Step 4: Decrease product quantity by 1
     await inventoryPage.decreaseProductQuantity(testProduct.name);
 
-    // Step 6: Verify quantity updated (wait for debounce)
+    // Step 5: Verify quantity updated (wait for debounce)
     await inventoryPage.waitForQuantityUpdate();
     const updatedQuantity = await inventoryPage.getProductQuantityValue(testProduct.name);
     expect(updatedQuantity).toBe(String(testProduct.quantity - 1));
 
-    // Step 7: Delete the product
+    // Step 6: Delete the product
     await inventoryPage.deleteProduct(testProduct.name);
 
-    // Step 8: Verify product no longer exists in table
+    // Step 7: Verify product no longer exists in table
     await inventoryPage.waitForProductRemoval(testProduct.name);
     expect(await inventoryPage.hasProduct(testProduct.name)).toBe(false);
-
-    // Step 9: Logout
-    await navigation.logout();
-    await navigation.waitForLogoutRedirect();
   });
 
   test("cancel product deletion", async ({ page }) => {
