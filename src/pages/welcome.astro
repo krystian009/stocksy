@@ -1,0 +1,39 @@
+---
+/**
+ * Welcome (Landing) Page
+ *
+ * The public-facing landing page for unauthenticated users.
+ * Explains the app's value proposition and encourages sign-up.
+ * Authenticated users are redirected to the home dashboard.
+ */
+export const prerender = false;
+
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/landing/HeroSection.astro";
+import ProblemSection from "@/components/landing/ProblemSection.astro";
+import FeatureCards from "@/components/landing/FeatureCards.astro";
+import HowItWorks from "@/components/landing/HowItWorks.astro";
+import FinalCTA from "@/components/landing/FinalCTA.astro";
+import LandingFooter from "@/components/landing/LandingFooter.astro";
+
+const { user } = Astro.locals;
+
+// Redirect authenticated users to dashboard
+if (user) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout
+  title="Stocksy - Never Run Out of Essentials Again"
+  description="Stocksy helps you track household inventory, auto-generates shopping lists, and keeps you stocked on what matters."
+>
+  <main>
+    <HeroSection />
+    <ProblemSection />
+    <FeatureCards />
+    <HowItWorks />
+    <FinalCTA />
+  </main>
+  <LandingFooter />
+</Layout>

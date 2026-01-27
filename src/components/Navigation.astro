@@ -23,7 +23,6 @@ interface Props {
 const currentPath = Astro.url.pathname;
 const { user }: Props = Astro.props;
 const isAuthenticated = Boolean(user);
-const shouldShowAuthButton = isAuthenticated || currentPath !== "/login";
 
 const navItems = [
   { name: "Home", href: "/", testId: "nav-link-home" },
@@ -97,11 +96,14 @@ const navItemsWithState = isAuthenticated
             <UserNav client:load user={user} />
           </>
         ) : (
-          shouldShowAuthButton && (
-            <Button size="sm" asChild>
-              <a href="/login">Sign in</a>
+          <>
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/login">Login</a>
             </Button>
-          )
+            <Button size="sm" asChild>
+              <a href="/register">Sign Up</a>
+            </Button>
+          </>
         )
       }
     </div>

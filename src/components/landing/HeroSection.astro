@@ -1,0 +1,101 @@
+---
+/**
+ * HeroSection Component
+ *
+ * The primary above-the-fold section of the landing page.
+ * Contains the main value proposition headline, supporting text,
+ * call-to-action buttons, and an app preview mockup.
+ */
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { PackageOpen, AlertTriangle } from "lucide-react";
+---
+
+<section class="relative overflow-hidden bg-background py-16 lg:py-24">
+  <div class="container mx-auto max-w-6xl px-4">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <!-- Left: Text Content -->
+      <div class="flex flex-col items-start gap-6">
+        <h1 class="text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
+          Never run out of essentials again.
+        </h1>
+        <p class="max-w-xl text-lg text-muted-foreground">
+          Stocksy helps you track household inventory, auto-generates shopping lists, and keeps you stocked on what
+          matters. No more forgotten items or wasteful overbuying.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <Button size="lg" asChild>
+            <a href="/register">Get Started Free</a>
+          </Button>
+          <Button variant="outline" size="lg" asChild>
+            <a href="#features">Learn More</a>
+          </Button>
+        </div>
+      </div>
+
+      <!-- Right: App Preview Mockup -->
+      <div class="relative">
+        <Card class="shadow-lg">
+          <CardContent class="p-0">
+            <!-- Mock Inventory Preview -->
+            <div class="rounded-xl bg-card p-4">
+              <!-- Header -->
+              <div class="mb-4 flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-2">
+                  <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                    <PackageOpen className="h-4 w-4" />
+                  </div>
+                  <span class="font-semibold">My Inventory</span>
+                </div>
+                <span class="text-xs text-muted-foreground">4 items</span>
+              </div>
+
+              <!-- Mock Items -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between rounded-lg bg-amber-50 p-3 dark:bg-amber-950">
+                  <div class="flex items-center gap-3">
+                    <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    <span class="font-medium">Milk</span>
+                  </div>
+                  <span
+                    class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-200"
+                  >
+                    Low Stock
+                  </span>
+                </div>
+
+                <div class="flex items-center justify-between rounded-lg bg-muted/50 p-3">
+                  <span class="font-medium">Eggs</span>
+                  <span class="text-sm text-muted-foreground">12 pcs</span>
+                </div>
+
+                <div class="flex items-center justify-between rounded-lg bg-muted/50 p-3">
+                  <span class="font-medium">Coffee Beans</span>
+                  <span class="text-sm text-muted-foreground">500g</span>
+                </div>
+
+                <div class="flex items-center justify-between rounded-lg bg-red-50 p-3 dark:bg-red-950">
+                  <div class="flex items-center gap-3">
+                    <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                    <span class="font-medium">Toilet Paper</span>
+                  </div>
+                  <span
+                    class="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-200"
+                  >
+                    Out of Stock
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- Decorative elements -->
+        <div class="absolute -right-4 -top-4 -z-10 h-72 w-72 rounded-full bg-primary/5 blur-3xl" aria-hidden="true">
+        </div>
+        <div class="absolute -bottom-8 -left-8 -z-10 h-64 w-64 rounded-full bg-primary/5 blur-3xl" aria-hidden="true">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+/**
+ * FinalCTA Component
+ *
+ * A strong closing call-to-action section encouraging
+ * users to create an account.
+ */
+import { Button } from "@/components/ui/button";
+---
+
+<section class="bg-muted/40 py-16 lg:py-24">
+  <div class="container mx-auto max-w-3xl px-4 text-center">
+    <h2 class="mb-4 text-2xl font-semibold text-foreground lg:text-3xl">Ready to stop guessing?</h2>
+    <p class="mb-8 text-lg text-muted-foreground">
+      Join households that have simplified their inventory management. Free to use, no credit card required.
+    </p>
+    <Button size="lg" asChild>
+      <a href="/register">Create Free Account</a>
+    </Button>
+  </div>
+</section>

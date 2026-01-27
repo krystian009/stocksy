@@ -1,0 +1,57 @@
+---
+/**
+ * FeatureCards Component
+ *
+ * Displays three key feature cards highlighting the main
+ * benefits of using Stocksy.
+ */
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Package, ShoppingCart, CheckCircle } from "lucide-react";
+
+const features = [
+  {
+    icon: Package,
+    title: "Track Products",
+    description: "Add items with quantities and minimum thresholds to always know what you have at home.",
+  },
+  {
+    icon: ShoppingCart,
+    title: "Auto Shopping List",
+    description: "Your shopping list generates automatically when any item runs low. No thinking required.",
+  },
+  {
+    icon: CheckCircle,
+    title: "Quick Check-in",
+    description: "Update your inventory with one tap after shopping. Items leave the list automatically.",
+  },
+];
+---
+
+<section id="features" class="scroll-mt-16 bg-muted/40 py-16 lg:py-24">
+  <div class="container mx-auto max-w-6xl px-4">
+    <div class="mb-12 text-center">
+      <h2 class="mb-4 text-2xl font-semibold text-foreground lg:text-3xl">Everything you need to stay stocked</h2>
+      <p class="mx-auto max-w-2xl text-muted-foreground">
+        Simple tools that work together to keep your household running smoothly.
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3 lg:gap-8">
+      {
+        features.map((feature) => (
+          <Card class="text-center">
+            <CardHeader class="pb-4">
+              <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+                <feature.icon className="h-7 w-7 text-primary" />
+              </div>
+              <CardTitle class="text-lg">{feature.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription class="text-base">{feature.description}</CardDescription>
+            </CardContent>
+          </Card>
+        ))
+      }
+    </div>
+  </div>
+</section>

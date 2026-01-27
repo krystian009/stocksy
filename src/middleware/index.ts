@@ -2,7 +2,7 @@ import { defineMiddleware } from "astro:middleware";
 
 import { createSupabaseServerInstance } from "@/db/supabase.client";
 
-const PUBLIC_AUTH_PAGES = new Set(["/login", "/register", "/forgot-password", "/password-reset"]);
+const PUBLIC_AUTH_PAGES = new Set(["/login", "/register", "/forgot-password", "/password-reset", "/welcome"]);
 const STATIC_PATH_PREFIXES = ["/_astro", "/_image", "/assets", "/public", "/@fs", "/node_modules"];
 const STATIC_PATHS = new Set(["/favicon.png", "/favicon.ico", "/robots.txt"]);
 const AUTH_API_PREFIX = "/api/auth";
@@ -42,7 +42,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
       });
     }
 
-    return redirect("/login");
+    return redirect("/welcome");
   }
 
   if (locals.user && PUBLIC_AUTH_PAGES.has(url.pathname)) {

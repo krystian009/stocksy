@@ -37,7 +37,7 @@ export function UserNav({ user }: UserNavProps) {
       }
 
       toast.success("Signed out");
-      window.location.assign("/login");
+      window.location.assign("/");
     } catch {
       toast.error("Unable to sign out.");
       setIsSigningOut(false);
