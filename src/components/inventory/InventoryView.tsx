@@ -1,9 +1,9 @@
 import { useEffect, useState, type FC, useRef } from "react";
 import type { ProductsListQueryParams } from "@/types";
 import { useInventory } from "@/lib/hooks/useInventory";
+import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import InventoryHeader from "./InventoryHeader";
 import ProductTable from "./ProductTable";
-import ProductTableSkeleton from "./ProductTableSkeleton";
 import ProductFormDialog from "./ProductFormDialog";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import type { ProductFormValues, ProductViewModel } from "./types";
@@ -141,7 +141,7 @@ const InventoryView: FC = () => {
       )}
 
       {isLoading ? (
-        <ProductTableSkeleton />
+        <LoadingIndicator message="Loading inventory..." />
       ) : (
         <ProductTable
           products={products}

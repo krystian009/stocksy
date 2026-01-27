@@ -77,7 +77,7 @@ function reducer(state: InventoryState, action: InventoryAction): InventoryState
 const initialState: InventoryState = {
   products: [],
   meta: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
   query: {
     page: 1,
